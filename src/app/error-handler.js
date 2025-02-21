@@ -36,7 +36,6 @@ const errorHandler = (error, ctx) => {
             status = 404;
             message = "NOT FOUND";
     }
-    console.log(message);
     ctx.status = status;
     // 还是需要进行格式化的
     ctx.body = JSON.stringify(message);
