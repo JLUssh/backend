@@ -1,3 +1,5 @@
+const { generateAccessJWT } = require('./../utils');
+
 const {
     create,
     search,
@@ -5,6 +7,8 @@ const {
     updateUser,
     getUserName
 } = require('./../service/user');
+
+
 
 const {
     uploadPost
@@ -20,31 +24,52 @@ const path = require("node:path");
 
 class UserController {
 
-    async login (ctx, next) {
+    async login (ctx) {
         let userInfo = ctx.request.body;
         console.log(userInfo)
-        const res = await search(userInfo);
+        try {
+            const res = await search(userInfo);
 
-        if (res.length === 0) {
-            const error = new Error(errorTypes.USER_OR_PASS_ERROR);
-            ctx.app.emit('error', error, ctx);
-        } else {
-            let user = res[0],
-                // 有些信息并不应该发送给客户端
-                response = {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    avatar_url: user.avatar_url,
+            if (res.length === 0) {
+                const error = new Error(errorTypes.USER_OR_PASS_ERROR);
+                ctx.app.emit('error', error, ctx);
+            } else {
+                let user = res[0],
+                    // 有些信息并不应该发送给客户端
+                    response = {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        avatar_url: user.avatar_url,
+                    };
+
+                // ctx.user = response;
+                global.user = response;
+                let payload = {
+                    id: response.id,
+                    name: response.name,
+                    email: response.email
                 };
+                const token = generateAccessJWT(payload, config.SECRET_ACCESS_TOKEN, 60 * 60 * 24);
+                console.log('token: ', token);
 
-            // ctx.user = response;
-            global.user = response;
+                let options = {
+                    maxAge: 60 * 60 * 24 * 1000,// would expire in 24 hours
+                    // sameSite: "None",
+                    // secure: true,
+                    httpOnly: true
+                }
+                // // set the token to response header, 
+                // so that the client sends it back 
+                // on each subsequent request
+                ctx.cookies.set("SessionID", token, options);
 
-            console.log(user);
-
-            ctx.body = response;
+                ctx.body = response;
+            }
+        } catch (error) {
+            console.log(error);
         }
+
     }
 
     async register (ctx, next) {
