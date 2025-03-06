@@ -25,12 +25,16 @@ const errorHandler = (error, ctx) => {
             message = "无效的token~";
             break;
         case errorTypes.UNPERMISSION:
-            status = 401; // 参数错误
+            status = 403; // 参数错误
             message = "您不具备操作的权限~";
             break;
         case errorTypes.USER_OR_PASS_ERROR:
             status = 401; // 参数错误
             message = "用户名或密码错误~";
+            break;
+        case errorTypes.CONTENT_NOT_SATISFY_REQUIRMENT:
+            status = 413; // 参数错误
+            message = "内容不符合要求~";
             break;
         default:
             status = 404;

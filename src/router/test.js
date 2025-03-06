@@ -6,7 +6,7 @@ const apiRouter = new Router();
 // 创建博客
 
 
-apiRouter.get(`/getInfo`, verify, (ctx, next) => {
+apiRouter.get(`/getInfo`, (ctx, next) => {
     ctx.body = JSON.stringify('jlussh');
     ctx.status = 200;
 });

@@ -22,7 +22,7 @@ const userRouter = new Router({
 
 // 路径问题
 // 也是希望获得一些信息
-userRouter.post('/login', verify, login);
+userRouter.post('/login', login);
 
 
 // 为啥需要在服务器端处理密码啊，不对啊

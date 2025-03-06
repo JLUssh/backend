@@ -5,6 +5,7 @@ const PASSWORD_IS_INCORRENT = 'password_is_incorrent';
 const UNAUTHORIZATION = 'UNAUTHORIZATION';
 const UNPERMISSION = 'unpermission';
 const USER_OR_PASS_ERROR = 'user_or_pass_error';
+const CONTENT_NOT_SATISFY_REQUIRMENT = 'content_not_satisfy_requirment';
 
 module.exports = {
   NAME_OR_PASSWORD_IS_REQUIRED,
@@ -13,5 +14,6 @@ module.exports = {
   PASSWORD_IS_INCORRENT,
   UNAUTHORIZATION,
   UNPERMISSION,
-  USER_OR_PASS_ERROR
+  USER_OR_PASS_ERROR,
+  CONTENT_NOT_SATISFY_REQUIRMENT
 }

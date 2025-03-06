@@ -171,7 +171,8 @@ class ApiService {
             // console.log(result);
             return result[0];
         } catch (error) {
-            console.log(error);
+            // console.log(error);
+            throw error;
         }
     }
 }

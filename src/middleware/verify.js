@@ -13,7 +13,9 @@ async function verify (ctx, next) {
                 sessionId = cookiesArr.filter((item) => item.split('=').includes('SessionID'));
 
             if (sessionId.length) {
-                sessionId = sessionId[0].split('=')[1]
+                sessionId = sessionId[0].split('=')[1];
+                // 还得发送回去验证下吗？
+                // 是否过期
             } else {
                 //// 没有相应的cookie
                 ctx.status = 401;
@@ -28,6 +30,7 @@ async function verify (ctx, next) {
 
             // 还得看下账户是否存在 查询数据库
             jwt.verify(sessionId, config.SECRET_ACCESS_TOKEN, async (error, decoded) => {
+                // 过期
                 if (error) {
                     ctx.status = 401;
                     ctx.body = JSON.stringify({

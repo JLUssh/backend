@@ -169,38 +169,45 @@ class UserController {
 
     //上传一个post
     async uploadPost (ctx, next) {
+        try {
+            //从地址中得到的
+            let {
+                userId
+            } = ctx.params;
 
-        //从地址中得到的
-        let {
-            userId
-        } = ctx.params;
+            //信息
+            let data = ctx.request.body,
+                postUrl;
 
-        //信息
-        let data = ctx.request.body,
-            postUrl;
+            //在此之前，已经用中间件进行处理了
 
-        //在此之前，已经用中间件进行处理了
+            // 这里是对图像的处理
+            // 得到一个图片的路径
+            if (ctx.file) {
+                postUrl = "http://" + path.join(`${config.APP_HOST}:${config.APP_PORT}/`, ctx.file.path);
+                postUrl = postUrl.replaceAll('\\', '\/');
+            }
 
-        // 这里是对图像的处理
-        // 得到一个图片的路径
-        if (ctx.file) {
-            postUrl = "http://" + path.join(`${config.APP_HOST}:${config.APP_PORT}/`, ctx.file.path);
-            postUrl = postUrl.replaceAll('\\', '\/');
+            //相关信息
+            let postInfo = {
+                photo: postUrl ? postUrl : null,
+                user_id: userId,
+                ...data,
+            };
+
+            // 可能顺序不匹配？
+            console.log(postInfo);
+            let res = await uploadPost(postInfo);
+
+            console.log(res);
+
+            ctx.body = JSON.stringify(res);
+        } catch (err) {
+
+            const error = new Error(errorTypes.CONTENT_NOT_SATISFY_REQUIRMENT);
+            ctx.app.emit('error', error, ctx);
         }
 
-        //相关信息
-        let postInfo = {
-            photo: postUrl ? postUrl : null,
-            user_id: userId,
-            ...data,
-        };
-        // 可能顺序不匹配？
-        console.log(postInfo);
-        let res = await uploadPost(postInfo);
-
-        console.log(res);
-
-        ctx.body = JSON.stringify(res);
     }
 }
 
