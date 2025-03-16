@@ -2,9 +2,9 @@ const multer = require('@koa/multer');
 
 const { AVATAR_PATH, PICTURE_PATH } = require('./../constants/file-path');
 
-const verifyUser = async (ctx, next) => {
+// const verifyUser = async (ctx, next) => {
 
-}
+// }
 
 const avatarStore = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -58,7 +58,7 @@ const bgImgHandler = bgImgUpload.single('bgImg');
 
 
 module.exports = {
-    verifyUser,
+    // verifyUser,
     avatarHandler,
     bgImgHandler
 };

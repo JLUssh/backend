@@ -1,11 +1,17 @@
+const errorTypes = require('./../constants/error-types')
 const config = require('./../app/config');
 const jwt = require('jsonwebtoken');
+
+//// 需要有权限
 //// 一些内容的访问，需要进行验证
 // 验证token是否有效
+
+//// authentication and authorization
 async function verify (ctx, next) {
     try {
 
         // console.log(ctx.headers);
+        // request / response
         let cookies = ctx.headers['cookie'];
 
         if (cookies) {
@@ -17,36 +23,24 @@ async function verify (ctx, next) {
                 // 还得发送回去验证下吗？
                 // 是否过期
             } else {
+                ///// 没有相应的权限
                 //// 没有相应的cookie
-                ctx.status = 401;
-                ctx.body = JSON.stringify({
-                    message: "unauthorized!"
-                });
+                ctx.app.emit(new Error(errorTypes.UNAUTHORIZATION));
                 return;
             }
-            console.log('headers:')
-            console.log(cookies);
-            console.log(sessionId);
-
+            // 可能中间件断掉了
             // 还得看下账户是否存在 查询数据库
-            jwt.verify(sessionId, config.SECRET_ACCESS_TOKEN, async (error, decoded) => {
-                // 过期
-                if (error) {
-                    ctx.status = 401;
-                    ctx.body = JSON.stringify({
-                        message: "unauthorized!"
-                    });
-                    return;
-                }
-
+            try {
+                const decoded = jwt.verify(sessionId, config.SECRET_ACCESS_TOKEN);
+                console.log('decoded')
                 console.log(decoded);
                 await next();
-            });
+            } catch (error) {
+                ctx.app.emit(new Error(errorTypes.UNAUTHORIZATION));
+                return;
+            }
+
         }
-
-
-
-
     } catch (error) {
         console.log(error)
     }

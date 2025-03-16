@@ -33,6 +33,8 @@ app.use(
 
 useRoutes.call(app);
 
+// emitter.on(eventName, listener)
+// emitter.emit(eventName, ...args);
 app.on("error", errorHandler);
 
 module.exports = app;

@@ -1,5 +1,8 @@
 const Router = require('koa-router');
 
+//// 验证，都得跟用户操作相关吧？
+const verify = require('./../middleware/verify');
+
 const {
     getCategories,
     addPost,
@@ -21,10 +24,10 @@ let pf = '/post';
 apiRouter.post(`${pf}`, addPost);
 
 // 删除
-apiRouter.del(`${pf}/:postId`, deletePost);
+apiRouter.del(`${pf}/:postId`, verify, deletePost);
 
 //更新
-apiRouter.put(`${pf}/:postId`, changePost);
+apiRouter.put(`${pf}/:postId`, verify, changePost);
 
 //获取单个
 apiRouter.get(`${pf}/:postId`, fetchSinglePost);

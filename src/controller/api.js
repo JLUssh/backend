@@ -49,7 +49,9 @@ const deletePost = async (ctx, next) => {
         // 放置到了params中
         let { postId } = ctx.params;
         const result = await removePost(postId);
-        ctx.body = result;
+        ctx.body = JSON.stringify(result);
+        console.log(result);
+        console.log('aslfjkasdfklasjfdlkf---------')
     } catch (error) {
         console.log(error);
     }

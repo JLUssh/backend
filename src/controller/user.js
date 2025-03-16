@@ -50,6 +50,10 @@ class UserController {
                     name: response.name,
                     email: response.email
                 };
+
+                // base64 以 . 分割  header payload signature 
+                // 要提供相应的 secret key
+                // 一旦发送，无法取消，只能等其到达过期时间
                 const token = generateAccessJWT(payload, config.SECRET_ACCESS_TOKEN, 60 * 60 * 24);
                 console.log('token: ', token);
 
@@ -59,6 +63,8 @@ class UserController {
                     // secure: true,
                     httpOnly: true
                 }
+                //// 相同域名下的地址进行访问，都是携带着的
+                //// 对应着 set-cookie这个字段
                 // // set the token to response header, 
                 // so that the client sends it back 
                 // on each subsequent request

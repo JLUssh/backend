@@ -33,6 +33,7 @@ const errorHandler = (error, ctx) => {
             message = "用户名或密码错误~";
             break;
         case errorTypes.CONTENT_NOT_SATISFY_REQUIRMENT:
+            // 这个针对的是内容过大
             status = 413; // 参数错误
             message = "内容不符合要求~";
             break;
